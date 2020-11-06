@@ -7,9 +7,9 @@
  */
 
 namespace app\admin\model;
+use think\Model;
 
-
-class Article
+class Article extends Model
 {
 
 }

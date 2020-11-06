@@ -46,7 +46,33 @@ class Admin extends Model
        }else{
            $data['password'] = md5($data['password']);
        }
-       return $this::update(['name'=>$data['name'],''=>$data['password']],['id'=>$data['id']]);
+       return $this::update(['name'=>$data['name'],'password'=>$data['password']],['id'=>$data['id']]);
+   }
+
+   public function deladmin($id)
+   {
+       if($this::destroy($id)){
+           return 1;
+       }else{
+           return 2;
+       }
+   }
+
+   public function login($data)
+   {
+        $admin = Admin::getByName($data['name']);
+        if($admin){
+            if($admin['password']==md5($data['password'])){
+                session('id',$admin['id']);
+                session('name',$admin['name']);
+                return 2; //登录密码正确
+            }else{
+                return 3; //登录密码错误
+            }
+        }else{
+            return 1;  //用户不存在的情况
+        }
+
    }
 
 

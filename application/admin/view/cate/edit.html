@@ -52,7 +52,7 @@
                                         <li>
                         <a href="{:url('lst')}">栏目管理</a>
                     </li>
-                                        <li class="active">添加栏目</li>
+                                        <li class="active">修改栏目</li>
                                         </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -64,19 +64,19 @@
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增栏目</span>
+                <span class="widget-caption">修改栏目</span>
             </div>
             <div class="widget-body">
                 <div id="horizontal-form">
-                    <form class="form-horizontal" role="form" action="{:url('cate/add')}" method="post">
-
+                    <form class="form-horizontal" role="form" action="{:url('cate/edit')}" method="post">
+                      <input type="hidden" name="id" value="{$cates.id}">
                       <div class="form-group">
                         <label for="catename" class="col-sm-2 control-label no-padding-right">上级栏目</label>
                         <div class="col-sm-6">
                             <select name="pid">
                               <option value="0">顶级栏目</option>
                               {volist name="cateres" id="cate"}
-                                <option value="{$cate.id}">
+                                <option value="{$cate.id}" {if condition="$cates.pid eq $cate.id"}selected="selected" {/if}>
                                   {if condition="$cate.level neq 0"}|{/if}
                                   <?php echo str_repeat('-',$cate['level']*4) ?>
                                   {$cate.catename}</option>
@@ -89,7 +89,7 @@
                         <div class="form-group">
                             <label for="catename" class="col-sm-2 control-label no-padding-right">栏目名称</label>
                             <div class="col-sm-6">
-                                <input class="form-control" id="catename" placeholder="" name="catename" required="" type="text">
+                                <input class="form-control" id="catename" placeholder="" name="catename"  value="{$cates.catename}" type="text">
                             </div>
                             <p class="help-block col-sm-4 red">* 必填</p>
                         </div>
@@ -99,19 +99,19 @@
                             <div class="col-sm-6">
                               <div class="radio" style="float: left;margin-right:10px;">
                                 <label>
-                                  <input name="type" type="radio"  value="1"   checked="checked">
+                                  <input name="type" {if condition="$cates.type eq 1"}checked="checked"{/if} type="radio"  value="1"   >
                                   <span class="text">列表 </span>
                                 </label>
                               </div>
                               <div class="radio" style="float: left;margin-right:10px;">
                                 <label>
-                                  <input name="type" type="radio"  value="2">
+                                  <input name="type" {if condition="$cates.type eq 2"}checked="checked"{/if} type="radio"  value="2">
                                   <span class="text">图片 </span>
                                 </label>
                               </div>
                               <div class="radio" style="float: left;margin-right:10px;">
                                 <label>
-                                  <input name="type" type="radio"  value="3">
+                                  <input name="type" {if condition="$cates.type eq 3"}checked="checked"{/if} type="radio"  value="3">
                                   <span class="text">单页 </span>
                                 </label>
                               </div>

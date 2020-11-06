@@ -8,10 +8,10 @@
 
 namespace app\admin\controller;
 // use think\View;
-use think\Controller;
+use app\admin\controller\Common;
 use app\admin\model\Admin as AdminModel;
 use think\Db;
-class Admin extends Controller
+class Admin extends Common
 {
     public function lst()
     {
@@ -52,20 +52,24 @@ class Admin extends Controller
 
         if(request()->isPost()){
             $data = input('post.');
-            if(!$data['name']){
-                $this->error('管理员用户名不得为空!');
-            }
-            if(!$data['password']){
-                $data['password']=$admins['password'];
-            }else{
-                $data['password'] = md5($data['password']);
-            }
+            // if(!$data['name']){
+            //     $this->error('管理员用户名不得为空!');
+            // }
+            // if(!$data['password']){
+            //     $data['password']=$admins['password'];
+            // }else{
+            //     $data['password'] = md5($data['password']);
+            // }
 
             // $res = db('admin')->update($data);
             // $res = AdminModel::update(['name'=>$data['name'],'password'=>$data['password']],['id'=>$data['id']]);
             $adminM = new AdminModel();
-            $res = $adminM->saveadmin($data,$admins);
-            if($res !== false){
+            $saveNum = $adminM->saveadmin($data,$admins);
+            if($saveNum=='2'){
+                $this->error('管理员用户名不得为空!');
+            }
+
+            if($saveNum !== false){
                 $this->success('修改成功!',url('lst'));
             }else{
                 $this->error('修改失败!');
@@ -79,9 +83,23 @@ class Admin extends Controller
         $this->assign('admin',$admins);
         return view();
     }
+
     public function del($id)
     {
-
+        $adminM = new AdminModel();
+        $delnum = $adminM->deladmin($id);
+        if($delnum == '1'){
+            $this->success('删除管理员成功!',url('lst'));
+        }else{
+            $this->error('删除管理员失败!');
+        }
     }
+
+    public function logout()
+    {
+        session(null);
+        $this->success('退出系统成功!',url('login/index'));
+    }
+
 
 }
