@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 use app\admin\controller\Common;
 use app\admin\model\Cate as CateModel;
+use app\admin\model\Article as ArticleModel;
 class Cate extends Common
 {
     protected $beforeActionList = [
@@ -82,9 +83,17 @@ class Cate extends Common
 
     public function delsoncate()
     {
-        $cateid = input('id');  //要删除当前栏目的id
+        $cateid = (int)input('id');  //要删除当前栏目的id
         $cateM = new CateModel();
         $sonids = $cateM->getChildrenIds($cateid);
+        $allCateId=$sonids;
+        $allCateId[] = $cateid;
+        //删除父级栏目,子级栏目,孙级栏目下文章也删除
+        foreach ($allCateId as $k=>$v){
+            $articleM = new ArticleModel();
+            $articleM->where(array('cateid'=>$v))->delete();
+        }
+
         if($sonids){
             db('cate')->delete($sonids);
         }

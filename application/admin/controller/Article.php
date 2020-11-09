@@ -14,6 +14,12 @@ class Article extends Common
 {
     public function lst()
     {
+        $artRes = db('article')
+            ->alias('a')
+            ->field('a.*,b.catename')
+            ->join('bk_cate b','a.cateid=b.id')
+            ->paginate(2);
+        $this->assign('artRes',$artRes);
         return view('list');
     }
     public function add()
@@ -22,14 +28,15 @@ class Article extends Common
         $artM = new ArticleModel();
         if(request()->isPost()){
             $data = input('post.');
-            if($_FILES['thumb']['tmp_name']){
+            //使用钩子函数before_insert 到模型层处理图片
+            /*if($_FILES['thumb']['tmp_name']){
                 $file = request()->file('thumb');
                 $info = $file->move(ROOT_PATH . 'public\static' .DS. 'uploads');
                 if($info){
                     $thumb = 'http://www.qiyesix.com/' . 'static' . DS . 'uploads'. '/' . $info->getSaveName();
                     $data['thumb'] = $thumb;
                 }
-            }
+            }*/
 
             if($artM->save($data)){
                 $this->success('添加文章成功!',url('lst'));
@@ -42,13 +49,37 @@ class Article extends Common
         $this->assign('cateres',$cateres);
         return view();
     }
-    public function edit()
+    public function edit($id)
     {
         $cateM = new CateModel();
+        $artM = new ArticleModel();
+        if(request()->isPost()){
+            $data = input('post.');
+            $save = $artM->update($data);
+            if($save !== false){
+                $this->success('修改文章成功!',url('lst'));
+            }else{
+                $this->error('修改文章失败!');
+            }
+            return;
+        }
+
         $cateres =  $cateM->catetree();
-        $this->assign('cateres',$cateres);
+        $arts = db('article')->find($id);
+        $this->assign(array(
+            'arts'=>$arts,
+            'cateres'=>$cateres
+        ));
         return view();
     }
 
-    public function del(){}
+    public function del($id)
+    {
+        if(ArticleModel::destroy($id)){
+            $this->success('删除文章成功!',url('lst'));
+        }else{
+            $this->error('删除文章失败!');
+        }
+        dump($id);
+    }
 }
