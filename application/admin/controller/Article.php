@@ -28,6 +28,10 @@ class Article extends Common
         $artM = new ArticleModel();
         if(request()->isPost()){
             $data = input('post.');
+            $validate =  \think\Loader::validate('Article');
+            if(!$validate->scene('add')->check($data)){
+                $this->error($validate->getError());
+            }
             //使用钩子函数before_insert 到模型层处理图片
             /*if($_FILES['thumb']['tmp_name']){
                 $file = request()->file('thumb');
@@ -55,6 +59,10 @@ class Article extends Common
         $artM = new ArticleModel();
         if(request()->isPost()){
             $data = input('post.');
+            $validate = \think\Loader::validate('Article');
+            if(!$validate->scene('edit')->check($data)){
+                $this->error($validate->getError());
+            }
             $save = $artM->update($data);
             if($save !== false){
                 $this->success('修改文章成功!',url('lst'));

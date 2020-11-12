@@ -32,6 +32,10 @@ class Admin extends Common
     {
         if(request()->isPost()){
             $data = input('post.');
+            $validate= \think\Loader::validate('Admin');
+            if(!$validate->scene('add')->check($data)){
+                $this->error($validate->getError());
+            }
             // $res = db('admin')->insert($data);
             // $res = Db::name('admin')->insert($data);
             // $res = Db::table('bk_admin')->insert($data);
@@ -52,6 +56,10 @@ class Admin extends Common
 
         if(request()->isPost()){
             $data = input('post.');
+            $validate = \think\Loader::validate('Admin');
+            if(!$validate->scene('edit')->check($data)){
+                $this->error($validate->getError());
+            }
             // if(!$data['name']){
             //     $this->error('管理员用户名不得为空!');
             // }

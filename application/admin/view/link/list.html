@@ -21,7 +21,7 @@
 </head>
 <body>
 	<!-- 头部 -->
-	{include file="public/top" /}
+	{include file="public/top"  /}
 
 	<!-- /头部 -->
 	
@@ -47,12 +47,9 @@
                 <div class="page-breadcrumbs">
                     <ul class="breadcrumb">
                                         <li>
-                        <a href="#">系统</a>
+                        <a href="#">友情链接</a>
                     </li>
-                                        <li>
-                        <a href="{:url('lst')}">管理员管理</a>
-                    </li>
-                                        <li class="active">添加管理员</li>
+                                        <li class="active">友情链接管理</li>
                                         </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -60,35 +57,47 @@
                 <!-- Page Body -->
                 <div class="page-body">
                     
+<button type="button" tooltip="添加链接" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('link/add')}'"> <i class="fa fa-plus"></i> Add
+</button>
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
-            <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增用户</span>
-            </div>
             <div class="widget-body">
-                <div id="horizontal-form">
-                    <form class="form-horizontal" role="form" action="{:url('admin/add')}" method="post">
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label no-padding-right">管理员名称</label>
-                            <div class="col-sm-6">
-                                <input class="form-control" id="name" placeholder="" name="name"  type="text">
-                            </div>
-                            <p class="help-block col-sm-4 red">* 必填</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label no-padding-right">管理员密码</label>
-                              <div class="col-sm-6">
-                                <input class="form-control" id="password" placeholder="" name="password"  type="text">
-                              </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">保存信息</button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="flip-scroll">
+                  <form action="{:url('link/lst')}" method="post">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center" width="10%"><input class="btn btn-primary btn-sm shiny" type="submit" value="排序"></th>
+                                <th class="text-center">友情链名称</th>
+                                <th class="text-center">友情链地址</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="linkRes" id="link"}
+                              <tr>
+                                  <td align="center">{$link.id}</td>
+                                  <td align="center"><input style="text-align: center;width: 50px;" type="text" name="{$link.id}" value="{$link.sort}"></td>
+                                  <td align="center">{$link.title}</td>
+                                  <td align="center">{$link.url}</td>
+                                  <td align="center">
+                                      <a href="{:url('link/edit',array('id'=>$link.id))}" class="btn btn-primary btn-sm shiny">
+                                          <i class="fa fa-edit"></i> 编辑
+                                      </a>
+                                      <a href="#" onClick="warning('确实要删除吗', '{:url("link/del",array('id'=>$link.id))}')" class="btn btn-danger btn-sm shiny">
+                                          <i class="fa fa-trash-o"></i> 删除
+                                      </a>
+                                  </td>
+                              </tr>
+                        {/volist}
+                          </tbody>
+                    </table>
+                  </form>
+                </div>
+                <div style="margin-top: 20px">
+                  {$linkRes->render()}
                 </div>
             </div>
         </div>
