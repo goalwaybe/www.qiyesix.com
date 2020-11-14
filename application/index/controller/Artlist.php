@@ -9,7 +9,7 @@
 namespace app\index\controller;
 
 
-class Artlist
+class Artlist extends Common
 {
     public function index()
     {

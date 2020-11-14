@@ -30,6 +30,10 @@ class Conf extends Common
     {
         if(request()->isPost()){
             $data = input('post.');
+            $validate = \think\Loader::validate('Conf');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+            }
             if($data['values']){
                 $data['values'] = str_replace('，',',',$data['values']);
             }
@@ -47,6 +51,11 @@ class Conf extends Common
     {
         if(request()->isPost()){
             $data = input('post.');
+            $validate = \think\Loader::validate('Conf');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+            }
+
             if($data['values']){
                 $data['values'] = str_replace('，',',',$data['values']);
             }
@@ -65,8 +74,45 @@ class Conf extends Common
 
     public function conf()
     {
+        if(request()->isPost()){
+            $data = input('post.');
+            $formarr = array();
+            foreach($data as $k=>$v){
+                $formarr[]=$k;
+            }
+
+            $_confarr = db('conf')->field('enname')->select();
+            $confarr=array();
+            foreach ($_confarr as $k=>$v){
+                    $confarr[] = $v['enname'];
+            }
+
+            //将从数据库查出来的enname和提交的enname做对比
+            $checkboxarr =array();
+            foreach ($confarr as $k=>$v){
+                if(!in_array($v,$formarr)){
+                    $checkboxarr[]=$v;
+                }
+            }
+            // $checkboxarr;
+            if($checkboxarr){
+                foreach ($checkboxarr as $ke=>$v){
+                    ConfModel::where('enname',$v)->update(['value'=>$v]);
+                }
+            }
+            if($data){
+                foreach($data as $k=>$v){
+                    ConfModel::where('enname',$k)->update(['value'=>$v]);
+                }
+                $this->success('修改成功!');
+            }
+
+
+            return;
+        }
         $confres = ConfModel::order('sort ASC')->select();
         $this->assign('confres',$confres);
+        return view('conf');
     }
 
     public function del($id)

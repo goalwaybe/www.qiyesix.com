@@ -9,7 +9,7 @@
 namespace app\index\controller;
 
 
-class Page
+class Page extends Common
 {
     public function index()
     {

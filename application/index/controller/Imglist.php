@@ -9,7 +9,7 @@
 namespace app\index\controller;
 
 
-class Imglist
+class Imglist extends Common
 {
     public function index()
     {
