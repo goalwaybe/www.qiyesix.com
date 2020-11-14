@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use think\Controller;
+use think\captcha\Captcha;
 use app\admin\model\Admin as AdminModel;
 class Login extends Controller
 {
@@ -15,6 +16,7 @@ class Login extends Controller
     {
         if(request()->isPost()){
             $data = input('post.');
+            $this->check($data['code']);
             $adminM = new AdminModel();
             $num = $adminM->login($data);
             if($num==1){
@@ -29,6 +31,16 @@ class Login extends Controller
             return;
         }
         return view('login');
+    }
+
+    public function check($code='')
+    {
+        $captcha = new \think\captcha\Captcha();
+        if(!$captcha->check($code)){
+            $this->error('验证码错误');
+        }else{
+            return true;
+        }
     }
 
 }

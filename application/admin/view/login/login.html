@@ -21,19 +21,24 @@
     <div class="login-container animated fadeInDown">
         <form action="{:url('login/index')}" method="post">
             <div class="loginbox bg-white">
-                <div class="loginbox-title">登录后台</div>
+                <div class="loginbox-title">后台管理系统</div>
                 <div class="loginbox-textbox">
                     <input value="admin" class="form-control" placeholder="name" name="name" type="text">
                 </div>
                 <div class="loginbox-textbox">
                     <input class="form-control" placeholder="password" name="password" type="password">
                 </div>
+
+              <div class="loginbox-textbox">
+                <input class="form-control" style="width: 100px;float:left;" placeholder="code" name="code" type="text">
+                <img src="{:captcha_src()}" width="120" style="float: left;cursor: pointer;"  onclick="this.src='{:captcha_src()}?'+Math.random(); "  alt="captcha">
+              </div>
                 <div class="loginbox-submit">
                     <input class="btn btn-primary btn-block" value="Login" type="submit">
                 </div>
             </div>
                 <div class="logobox">
-                    <p class="text-center">童老师ThinkPHP交流群：4845194464</p>
+                    <p class="text-center">技术支持 : edit by kaiwang@dakaisha.com 2020年11月14日18:17:11</p>
                 </div>
         </form>
     </div>
