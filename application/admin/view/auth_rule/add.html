@@ -37,7 +37,7 @@
                 </div>
                 <!-- /Page Sidebar Header -->
                 <!-- Sidebar Menu -->
-                {include file="public/left" /}
+                {include file="public/left"  /}
                 <!-- /Sidebar Menu -->
             </div>
             <!-- /Page Sidebar -->
@@ -50,9 +50,9 @@
                         <a href="#">系统</a>
                     </li>
                                         <li>
-                        <a href="{:url('lst')}">管理员管理</a>
+                        <a href="{:url('lst')}">权限接管理</a>
                     </li>
-                                        <li class="active">添加管理员</li>
+                                        <li class="active">添加权限</li>
                                         </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -64,36 +64,37 @@
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增用户</span>
+                <span class="widget-caption">新增权限接</span>
             </div>
             <div class="widget-body">
                 <div id="horizontal-form">
-                    <form class="form-horizontal" role="form" action="{:url('admin/add')}" method="post">
+                    <form class="form-horizontal" role="form" action="{:url('authRule/add')}" method="post">
                         <div class="form-group">
-                          <label for="name" class="col-sm-2 control-label no-padding-right">所属用户组别</label>
-                          <div class="col-sm-6">
-                            <select name="group_id">
-                              {volist name="authGroupRes" id="authGroups"}
-                                  <option value="{$authGroups.id}">{$authGroups.title}</option>
-                              {/volist}
-                            </select>
-                          </div>
-                          <p class="help-block col-sm-4 red">* 必填</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label no-padding-right">管理员名称</label>
+                            <label for="title" class="col-sm-2 control-label no-padding-right">权限接名</label>
                             <div class="col-sm-6">
-                                <input class="form-control" id="name" placeholder="" name="name"  type="text">
+                              <select name="pid" id="">
+                                   <option value="0">顶级权限</option>
+                                {volist name="authRuleRes" id="authRule"}
+                                   <option value="{$authRule.id}"> <?php if($authRule['level'] !=0 ){echo '|';} echo str_repeat('-',$authRule['level']*3);  ?>  {$authRule.title}</option>
+                                {/volist}
+                              </select>
                             </div>
                             <p class="help-block col-sm-4 red">* 必填</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label no-padding-right">管理员密码</label>
-                              <div class="col-sm-6">
-                                <input class="form-control" id="password" placeholder="" name="password"  type="text">
-                              </div>
+                            <label for="url" class="col-sm-2 control-label no-padding-right">权限名称</label>
+                            <div class="col-sm-6">
+                              <input class="form-control" id="url" placeholder="" name="title"  type="text">
+                            </div>
                         </div>
+                      <div class="form-group">
+                        <label for="url" class="col-sm-2 control-label no-padding-right">控制器/方法</label>
+                        <div class="col-sm-6">
+                          <input class="form-control" id="url" placeholder="" name="name"  type="text">
+                        </div>
+                      </div>
+
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-default">保存信息</button>

@@ -21,7 +21,24 @@ class Common extends Controller
             $confres[$v['enname']] = $v['cnname'];
         }
         // dump($confres);
+        $this->getNavCates();
         $this->assign('confres',$confres);
+    }
+
+    //查询所有的栏目,最多两级
+    public function getNavCates()
+    {
+        $cateres = db('cate')->where(array('pid'=>0))->select();
+        foreach($cateres as $k=>$v){
+            $children = db('cate')->where(array('pid'=>$v['id']))->select();
+            if($children){
+                $cateres[$k]['children'] = $children;
+            }else{
+                $cateres[$k]['children'] = 0;
+            }
+        }
+        $this->assign('cateres', $cateres);
+
     }
 
 

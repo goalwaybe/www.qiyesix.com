@@ -7,12 +7,15 @@
  */
 
 namespace app\index\controller;
-
+use app\index\model\Article as ArticleModel;
 
 class Artlist extends Common
 {
     public function index()
     {
+        $articleM = new ArticleModel();
+        $artRes = $articleM->getAllArticles(input('cateid'));
+        $this->assign('artRes',$artRes);
         return view('artlist');
     }
 

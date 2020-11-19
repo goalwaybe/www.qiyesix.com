@@ -23,7 +23,7 @@ class Login extends Controller
                 $this->error('用户不存在!');
             }
             if($num==2){
-                $this->error('登录成功!',url('index/index'));
+                $this->success('登录成功!',url('index/index'));
             }
             if($num==3){
                 $this->error('密码错误!');

@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 // use think\View;
 use app\admin\controller\Common;
+use app\admin\controller\Auth;
 use app\admin\model\Admin as AdminModel;
 use think\Db;
 class Admin extends Common
@@ -22,8 +23,15 @@ class Admin extends Common
         // return $this->fetch('list');
         // $res = db('admin')->select();
         // $res = db('admin')->where(array('id'=>6))->find();
+        $authM = new Auth();
         $adminM = new AdminModel();
         $res = $adminM->getadmin();
+        //管理员列表中显示用户组别
+        foreach ($res as $k=>$v){
+            $_groupTitle = $authM->getGroups($v['id']);
+            $groupTitle = $_groupTitle[0]['title'];
+            $v['groupTitle'] = $groupTitle;
+        }
         $this->assign('res',$res);
         return view('list');
     }
@@ -48,6 +56,8 @@ class Admin extends Common
             }
             return;
         }
+        $authGroupRes = db('auth_group')->select();
+        $this->assign('authGroupRes',$authGroupRes);
         return view();
     }
     public function edit($id)
@@ -88,7 +98,17 @@ class Admin extends Common
         if(!$admins){
             $this->error('该管理员不存在');
         }
-        $this->assign('admin',$admins);
+        //当前用户属于哪个用户组
+        $authGroupAccess = db('auth_group_access')
+            ->where(array('uid'=>$id))
+            ->find();
+        //所有用户组
+        $authGroupRes = db('auth_group')->select();
+        $this->assign(array(
+            'admin' => $admins,
+            'authGroupRes' => $authGroupRes,
+            'group_id' => $authGroupAccess['group_id']
+        ));
         return view();
     }
 

@@ -28,6 +28,7 @@ class Article extends Common
         $artM = new ArticleModel();
         if(request()->isPost()){
             $data = input('post.');
+            $data['time'] = time();
             $validate =  \think\Loader::validate('Article');
             if(!$validate->scene('add')->check($data)){
                 $this->error($validate->getError());
